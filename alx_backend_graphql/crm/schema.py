@@ -1,6 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
 from .models import Customer, Product, Order
+from .filters import CustomerFilter, ProductFilter, OrderFilter
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -186,3 +188,27 @@ class OrderInput(graphene.InputObjectType):
     customer_id = graphene.ID(required=True)
     product_ids = graphene.List(graphene.ID, required=True)
     order_date = graphene.DateTime()
+    
+    
+class Query(graphene.ObjectType):
+    all_customers = DjangoFilterConnectionField(CustomerType, filterset_class=CustomerFilter, order_by=graphene.String())
+    all_products = DjangoFilterConnectionField(ProductType, filterset_class=ProductFilter, order_by=graphene.String())
+    all_orders = DjangoFilterConnectionField(OrderType, filterset_class=OrderFilter, order_by=graphene.String())
+
+    def resolve_all_customers(self, info, order_by=None, **kwargs):
+        qs = Customer.objects.all()
+        if order_by:
+            qs = qs.order_by(order_by)
+        return qs
+
+    def resolve_all_products(self, info, order_by=None, **kwargs):
+        qs = Product.objects.all()
+        if order_by:
+            qs = qs.order_by(order_by)
+        return qs
+
+    def resolve_all_orders(self, info, order_by=None, **kwargs):
+        qs = Order.objects.all()
+        if order_by:
+            qs = qs.order_by(order_by)
+        return qs    
