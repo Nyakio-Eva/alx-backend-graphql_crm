@@ -1,6 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
 from .models import Customer, Product, Order
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 import re
@@ -149,3 +151,38 @@ class Mutation(graphene.ObjectType):
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+
+
+#graphql types
+class CustomerType(DjangoObjectType):
+    class Meta:
+        model = Customer
+
+
+class ProductType(DjangoObjectType):
+    class Meta:
+        model = Product
+
+
+class OrderType(DjangoObjectType):
+    class Meta:
+        model = Order
+
+
+# Input Types
+class CustomerInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    email = graphene.String(required=True)
+    phone = graphene.String()
+
+
+class ProductInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    price = graphene.Decimal(required=True)
+    stock = graphene.Int()
+
+
+class OrderInput(graphene.InputObjectType):
+    customer_id = graphene.ID(required=True)
+    product_ids = graphene.List(graphene.ID, required=True)
+    order_date = graphene.DateTime()
