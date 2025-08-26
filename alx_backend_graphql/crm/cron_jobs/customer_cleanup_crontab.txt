@@ -1,1 +1,0 @@
-0 2 * * 0 /home/evie/ALX/ProBackend/alx-graphql/alx_backend_graphql/crm/cron_jobs/clean_inactive_customers.sh
