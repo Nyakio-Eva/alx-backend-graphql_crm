@@ -20,5 +20,6 @@ print(count)
 ")
 
 # Log result with timestamp
-echo \"\$(date '+%Y-%m-%d %H:%M:%S') - Deleted \$deleted_count inactive customers\" >> /tmp/customer_cleanup_log.txt
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Deleted $deleted_count inactive customers" >> /tmp/customercleanuplog.txt
+
 
