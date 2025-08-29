@@ -1,0 +1,1 @@
+0 8 * * * /usr/bin/python3 /home/evie/ALX/ProBackend/alx-graphql/alx_backend_graphql/crm/cron_jobs/send_order_reminders.py
